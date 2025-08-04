@@ -2,7 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
+
 const userRoutes = require('./routes/userRoutes');
+const imageRoutes = require('./routes/ImageRoutes.js')
 
 
 const connectDB = require('./Database/connection.js')
@@ -26,6 +28,7 @@ app.get('/', (req, res) => {
 });
 // Use routes with a base path
 app.use('/api/users', userRoutes);
+app.use('/api/image', imageRoutes);
 
 // Start server 
 app.listen(port, () => {
