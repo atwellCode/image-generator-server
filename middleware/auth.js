@@ -1,17 +1,19 @@
+const express = require('express');
 const jwt = require('jsonwebtoken');
 
 const userAuth = async (req, res, next) => {
-  const { token } = req.headers;
+  const authHeader = req.headers.authorization;
 
-  if (!token) {
-    return res.status(401).json({ success: false, message: "🚫 Not Authorized. Token missing." });
+  if (!authHeader || !authHeader.startsWith("Bearer")) {
+    return res.status(401).json({ success: false, message: "🚫 Not Authorized. Token missing or malformed." });
   }
+
+  const token = authHeader.split(" ")[1]; // Extract token after "Bearer"
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
     if (decoded.id) {
-      req.body.userId = decoded.id; // 🛠 Make sure this matches how you're accessing it in controllers
+       req.userId = decoded.id;
       next();
     } else {
       return res.status(403).json({ success: false, message: "❌ Token is invalid." });
@@ -22,4 +24,4 @@ const userAuth = async (req, res, next) => {
   }
 };
 
-module.exports = userAuth; 
+module.exports = userAuth;
