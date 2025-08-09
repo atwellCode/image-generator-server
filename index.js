@@ -18,10 +18,17 @@ const app = express();
 const port = process.env.PORT || 3013; // Fallback if PORT is undefined
 
 // Middleware
-app.use(cors()); // Enable CORS for all routes
 app.use(bodyParser.json()); // Parse application/json
 app.use(bodyParser.urlencoded({ extended: true })); // Parse application/x-www-form-urlencoded
+const cors = require("cors");
 
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "https://image-generator-ten-iota.vercel.app/"
+  ],
+  credentials: true
+}));
 // Routes
 app.get('/', (req, res) => {
     res.send('Hello Arslan!');
